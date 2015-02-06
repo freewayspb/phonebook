@@ -17,10 +17,13 @@ var
     order = require('gulp-order'),
     wiredep = require('wiredep').stream,
     useref = require('gulp-useref'),
-    gulpif = require('gulp-if');
+    gulpif = require('gulp-if'),
+    rimraf = require('gulp-rimraf'),
+    runSequence = require('run-sequence'),
+    clean = require('gulp-clean');
 
 // путь к готовому проекту
-BuildPath = './app/';
+BuildPath = 'app';
 
 // сборка папки 'app/'
 gulp.task('build', ['jade', 'less', 'js','images'], function() {
@@ -33,8 +36,8 @@ gulp.task('build', ['jade', 'less', 'js','images'], function() {
         .pipe(gulp.dest(BuildPath));
 });
 
-// компилируем Jade
-gulp.task('jade',['wiredep'], function() {
+// компилируем Jade если не включен webstorm компилятор
+gulp.task('jade', function() {
     gulp.src('_dev/_makeups/_pages/*.jade')
         .pipe(jade({
             pretty: true
@@ -49,14 +52,13 @@ gulp.task('clean', function () {
     return gulp.src('dist', {read: false}).pipe(clean());
 });
 
-// компилируем LESS
+// компилируем LESS если не включен webstorm компилятор
 gulp.task('less', function() {
     gulp.src(['_dev/_styles/**/*.less'])
         .pipe(less())
         .on('error', console.log) // Если есть ошибки, выводим и продолжаем
         .pipe(prefixer())
-        .pipe(concatCss("main.css"))
-        .pipe(gulp.dest(BuildPath + '/css'))
+        .pipe(concatCss())
         .pipe(minifycss({
             keepBreaks: true
         }))
@@ -70,10 +72,9 @@ gulp.task('less', function() {
 
 // собираем JS
 gulp.task('js', function() {
-    gulp.src('_dev/_js/_modules/**/*.js')
+    gulp.src('_dev/_js/**/*.js')
         .pipe(concat('main.js')) // Собираем все JS, кроме тех которые находятся в /app/js/vendor/**
         .on('error', console.log)
-        .pipe(gulp.dest(BuildPath + '/js'))
         .pipe(uglify())
         .on('error', console.log)
         .pipe(rename({
@@ -83,10 +84,31 @@ gulp.task('js', function() {
         .pipe(notify("<%= file.relative %> JS Complete!"))
         .pipe(connect.reload()); // даем команду на перезагрузку страницы
 });
+// собираем HTML
+gulp.task('html', function() {
+    gulp.src(['_dev/_makeups/_pages/*.html'],['!_dev/_makeups/**/_*.html'])
+        .pipe(gulp.dest(BuildPath))
+        .pipe(notify("<%= file.relative %> HTML Complete!"))
+        .pipe(connect.reload()); // даем команду на перезагрузку страницы
+});
+// собираем CSS
+gulp.task('css', function() {
+    gulp.src(['_dev/_styles/_sections/*.css'])
+        .pipe(concat('main.css')) // Собираем все CSS, кроме тех которые находятся в /app/css
+        .on('error', console.log)
+        .pipe(minifycss())
+        .on('error', console.log)
+        .pipe(rename({
+            suffix: '.min'
+        }))
+        .pipe(gulp.dest(BuildPath + '/css'))
+        .pipe(notify("<%= file.relative %> CSS Complete!"))
+        .pipe(connect.reload()); // даем команду на перезагрузку страницы
+});
 
 // копируем и минимизируем изображения
 gulp.task('images', function() {
-    gulp.src('_dev/img/**/*')
+    gulp.src('_dev/_img/**/*')
         .pipe(imagemin())
         .pipe(gulp.dest(BuildPath + '/img'))
 
@@ -97,118 +119,68 @@ gulp.task('fonts', function () {
     return gulp.src('./_dev/_styles/fonts/*')
         .pipe(gulp.dest(BuildPath + '/css/fonts/'));
 });
-// СБОРКА ПРОЕКТА ДЛЯ ТЕСТА
 
-gulp.task('test-build', ['jade', 'less'], function () {
-    var assets = useref.assets(); //Функция плагина gulp-useref
 
-    // Плагин rimraf удаляет каталог в переменной productionPath
-    //$.rimraf.sync(productionPath, function (er) {
-    //    if (er) throw er;
-    //});
-    gulp.src(['./app/*.html'])
-        // Плагин wiredep обрабатывает зависимости bower
-        .pipe(wiredep({
-            directory: './components'
-        }))
-        .pipe(assets).on('error', console.log) // находит блоки build в html и выделяет из них необходимые ресурсы
-        //.pipe($.if('*.js', $.uglify())).on('error', log)
-        //.pipe($.if('*.css', $.minifyCss({cache:false})))  // Минификация Css не работает в таком контексте, не справляется с путями к css
-
-        // Следующие две строчки были в примере плагина gulp-useref, пока не разбирался зачем они
-        .pipe(assets.restore())
-        .on('error', console.log)
-        .pipe(useref())
-        .on('error', console.log)
-        .pipe(gulp.dest(BuildPath)).on('error', console.log);
-});
-
-// Work witch bower
-gulp.task('wiredep', function(){
-
-    gulp.src('./_dev/**/*.less')
-        .pipe(wiredep({
-            directory: 'components',
-            ignorePath: /^(\.\.\/)+/
-        }))
-        .pipe(gulp.dest('./_dev'));
-    gulp.src('./_dev/**/*.jade')
-        .pipe(wiredep({
-            directory: 'components',
-            ignorePath: /^(\.\.\/)*\.\./
-        }))
-        .pipe(gulp.dest('./_dev'));
-});
-// сборка vendor
 gulp.task('vendor', function () {
     var assets = useref.assets();
-    return gulp.src('./app/*.html')
+
+    return gulp.src('app/*.html')
         .pipe(assets)
-        .pipe(gulpif(['*.js'], uglify()))
-        .pipe(gulpif(['*.css'], minifycss()))
         .pipe(assets.restore())
         .pipe(useref())
-        .pipe(gulp.dest(BuildPath));
+        .on('error', console.log)
+        .pipe(gulp.dest(BuildPath))
+        .pipe(notify("<%= file.relative %> VENDOR Complete!"))
+        .on('error', console.log);
+});
+gulp.task('bower', function () {
+    return gulp.src('app/*.html')
+        .pipe(wiredep({
+            directory: 'components'
+        }))
+        .pipe(gulp.dest(BuildPath))
+        .pipe(notify("<%= file.relative %> BOWER Complete!"));
+});
+
+// СБОРКА ПРОЕКТА ДЛЯ ТЕСТА
+gulp.task('build', function(cb) {
+    runSequence('build-clean',['html'],['js','css','images'],'fonts','bower', 'vendor', cb);
+});
+
+gulp.task('build-clean', function() {
+    return gulp.src(BuildPath)
+        .pipe(clean());
 });
 
 // слежка за папкой разработки
 gulp.task('watch', function() {
-    gulp.watch(['./_dev/_jade/**/*.jade', './_dev/_js/**/*.js', './_dev/_styles/**/*.less', './_dev/_styles/fonts/*'],'test-build');
-    //gulp.watch('./_dev/_styles/**/*.less', ['less']);
-    //gulp.watch('./_dev/_makeups/**/*.jade', ['jade']);
-    //gulp.watch('./_dev/_scripts/_modules/*.js', ['js']);
-    //gulp.watch('./app/*.html',['vendor']);
-    //gulp.watch('bower.json', ['vendor']);
+    gulp.watch(['./_dev/_makeups/**/*.html'],['build']);
+    gulp.watch(['./_dev/_js/**/*.js'],['js']);
+    gulp.watch(['./_dev/_styles/**/*.css', './_dev/_styles/fonts/*'],['css','fonts']);
+    gulp.watch(['./_dev/_img/*'],['images']);
 });
 
 // server
 gulp.task('connect', function() {
     connect.server({
-        root: BuildPath,
+        root: 'app',
         port: 8800,
         livereload: true
     });
     opn('http://localhost:8800/');
 });
 
-//// Переброс файлов компонентов bower в папку проекта
-//gulp.task('js:vendor', function () {
-//    var vendors = mainBowerFiles();
-//
-//     return gulp.src(vendors)
-//        .pipe(filter('**.js'))
-//        .pipe(order(vendors))
-//        .pipe(concat('vendor.js'))
-//        .pipe(uglify())
-//        .pipe(rename({
-//            suffix: '.min'
-//        }))
-//        .pipe(notify("<%= file.relative %> Bower Complete!"))
-//        .pipe(gulp.dest('app/js/'))
-//});
-//
-//gulp.task('css:vendor', function () {
-//    var vendors = mainBowerFiles();
-//
-//    return gulp.src(vendors)
-//        .pipe(filter('**.css'))
-//        .pipe(order(vendors))
-//        .pipe(concat('vendor.css'))
-//        .pipe(uglify())
-//        .pipe(rename({
-//            suffix: '.min'
-//        }))
-//        .pipe(notify("<%= file.relative %> Bower Complete!"))
-//        .pipe(gulp.dest('app/css/'));
-//});
-
-//gulp.task('default', function() {
-//    var bower = require('main-bower-files');
-//    var bowerNormalizer = require('gulp-bower-normalize');
-//    return gulp.src(bower(), {base: '.app/components'})
-//        .pipe(bowerNormalizer({bowerJson: './bower.json'}))
-//        .pipe(gulp.dest('./bower_dependencies/'))
-//});
-
 // задачи по умолчанию
 gulp.task('default', ['connect', 'watch']);
+
+function log(error) {
+    console.log([
+        '',
+        "----------ERROR MESSAGE START----------",
+        ("[" + error.name + " in " + error.plugin + "]"),
+        error.message,
+        "----------ERROR MESSAGE END----------",
+        ''
+    ].join('\n'));
+    this.end();
+}

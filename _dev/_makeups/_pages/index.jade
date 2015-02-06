@@ -1,0 +1,28 @@
+extends ../_layouts/_layout
+
+block title
+    title Phonebook
+block description
+    meta(name='description' content='Phonebook')
+
+block content
+    .wrapper
+        .maincontent
+            .container
+                section(id="phonebook" ng-controller="PhonebookCtrl")
+                    header(id="header")
+                        h1.result__title Phonebook
+                        div {{7+3}}
+                        form(id="todo-form" ng-submit="addContact()")
+                        input(id="new-contact" placeholder="What needs to be done?" ng-model="newContact" autofocus)
+                section(id="main" ng-show="totalCount" ng-cloak)
+                    input(id="toggle-all" type="checkbox" ng-model="allChecked" ng-click="markAll(allChecked)")
+                    label(for="toggle-all") Mark all as complete1
+                    ul(id="todo-list")
+                        li(ng-repeat="(id)")
+                            .view
+                                input(class="toggle" type="checkbox" ng-model="todo.completed" ng-change="contacts.$save(id)")
+                                label(ng-dblclick="editTodo(id)") {{todo.title}}
+                                button(class="destroy" ng-click="removeTodo(id)")
+                            form(ng-submit="doneEditing(id)")
+                                input(class="edit" ng-model="todo.title" todo-escape="revertEditing(id)" todo-blur="doneEditing(id)" todo-focus="todo == editedTodo")
