@@ -58,3 +58,15 @@ node_modules
 bower_components
 
 
+_dev/_js/app.js
+_dev/_js/_controllers/model.js
+_dev/_js/_controllers/phonebook.js
+_dev/_makeups/_common/_footer.html
+_dev/_makeups/_layouts/_layout.html
+_dev/_makeups/_pages/index.html
+_dev/_styles/_misc/_normalize.css
+_dev/_styles/_misc/adjustment.css
+_dev/_styles/_misc/mixins.css
+_dev/_styles/_sections/_common.css
+_dev/_styles/_sections/footer.css
+_dev/_styles/_sections/header.css
