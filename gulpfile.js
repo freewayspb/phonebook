@@ -86,7 +86,7 @@ gulp.task('js', function() {
 });
 // собираем HTML
 gulp.task('html', function() {
-    gulp.src(['_dev/_makeups/_pages/*.html'],['!_dev/_makeups/**/_*.html'])
+    gulp.src(['_dev/_makeups/_pages/**/*.html'],['!_dev/_makeups/**/_*.html'])
         .pipe(gulp.dest(BuildPath))
         .pipe(notify("<%= file.relative %> HTML Complete!"))
         .pipe(connect.reload()); // даем команду на перезагрузку страницы
@@ -131,7 +131,8 @@ gulp.task('vendor', function () {
         .on('error', console.log)
         .pipe(gulp.dest(BuildPath))
         .pipe(notify("<%= file.relative %> VENDOR Complete!"))
-        .on('error', console.log);
+        .on('error', console.log)
+        .pipe(connect.reload());
 });
 gulp.task('bower', function () {
     return gulp.src('app/*.html')
