@@ -1,11 +1,9 @@
-nav.controls
-    .navigate__left
-        a.navigate__back(href='#/' ng-if='!nav.btnAdd')
-            span.icon.navigate_icon.fa.fa-angle-left(aria-hidden="true")
-        a.navigate__btn(href='#/contact/add' ng-if='nav.btnAdd')
-            .btn.btn-default Добавить
-    .navigate__right(ng-if='nav.btnAdd')
-        .navigate__view(ng-click='nav.clickList()')
-            span.icon.fa.fa-list(aria-hidden="true" ng-class="{icon_active:nav.contactsList=='list'}")
-        .navigate__view(ng-click='nav.clickGrid()')
-            span.icon.fa.fa-th-large(aria-hidden="true" ng-class="{icon_active:nav.contactsList=='grid'}")
+nav.navigation.clearfix
+    .navigation__left
+        a.btn.btn-default(href='/' ng-show='navigation.btnBack') <
+        a.btn.btn-default(href='/additems' ng-show='navigation.addBtn') Добавить
+    .navigation__right.right(ng-show='navigation.addBtn')
+        .navigation__view(ng-click='navigation.List()')
+            span(class="glyphicon glyphicon-list" aria-hidden="true" ng-class="{icon_active:navigation.ListType == ''}")
+        .navigation__view(ng-click='navigation.Grid()')
+            span(class="glyphicon glyphicon-th-large" aria-hidden="true" ng-class="{icon_active:navigation.ListType == 'tile'}")

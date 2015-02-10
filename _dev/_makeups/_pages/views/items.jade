@@ -1,20 +1,14 @@
-header(id="header")
-    section(class="col-md-8")
-        h1.result__title Phonebook
-        div(class="page")
-            button(class="btn btn-default" ng-click="" ng-show="backBtn") <
-            button(class="btn btn-default" ng-click="" ng-show="addBtn") Добавить
-            input(rel="search" type="search" ng-show="search")
-            table(class="table table-hover")
-                thead
-                    td #
-                    td Имя
-                    td Фамилия
-                    td Телефон
-                    td email
-                tr(ng-repeat="item in items")
-                    td {{item.index + 1}}
-                    td {{item.name.first}}
-                    td {{item.name.last}}
-                    td {{item.phone}}
-                    td {{item.email}}
+input(rel="search" type="search" ng-show="")
+table(class="table table-hover")
+    thead
+        td #
+        td Имя
+        td Фамилия
+        td Телефон
+        td email
+    tr(ng-repeat="item in items" ng-click="editItems(item.$id)")
+        td {{item.index + 1}}
+        td {{item.name.first}}
+        td {{item.name.last}}
+        td {{item.phone}}
+        td {{item.email}}

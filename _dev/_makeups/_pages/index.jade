@@ -7,8 +7,12 @@ block description
 
 block content
     .wrapper
-        .maincontent(ng-controller="phoneBookCtrl as phonebook")
+        .maincontent
             .container
-                //include ../_common/_navigation
-                .wrapper
-                    include ../_pages/views/items
+                header
+                .wrapper(ng-controller="MainCtrl")
+                    section(class="col-md-8")
+                        h1.result__title Phonebook
+                        div(class="page")
+                            include ../_common/_navigation
+                        div(class="page" ng-view)

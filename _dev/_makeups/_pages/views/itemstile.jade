@@ -1,0 +1,7 @@
+.contacts-grid.cf
+    .contact.contacts_left(ng-repeat="item in items | filter:search" ng-click="editItems(item.$id)")
+        .contact-image
+            img(ng-src="{{item.img}}")
+        .contact__name {{item.firstname}} {{item.lastname}}
+        .contact__phone {{item.phone}}
+        .contact__email {{item.email}}

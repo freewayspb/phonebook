@@ -145,7 +145,7 @@ gulp.task('bower', function () {
 
 // СБОРКА ПРОЕКТА ДЛЯ ТЕСТА
 gulp.task('build', function(cb) {
-    runSequence('build-clean',['html'],['js','css','images'],'fonts','bower', 'vendor', cb);
+    runSequence('build-clean','html','js','css','images','fonts', cb);
 });
 
 gulp.task('build-clean', function() {
@@ -155,7 +155,7 @@ gulp.task('build-clean', function() {
 
 // слежка за папкой разработки
 gulp.task('watch', function() {
-    gulp.watch(['./_dev/_makeups/**/*.html'],['build']);
+    gulp.watch(['./_dev/_makeups/**/*.html'],['html']);
     gulp.watch(['./_dev/_js/**/*.js'],['js']);
     gulp.watch(['./_dev/_styles/**/*.css', './_dev/_styles/fonts/*'],['css','fonts']);
     gulp.watch(['./_dev/_img/*'],['images']);
