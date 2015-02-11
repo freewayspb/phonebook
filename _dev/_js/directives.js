@@ -1,26 +1,30 @@
 (function(){
     angular
         .module('phoneBookDirectives', [])
-    .directive('listItems', listItems)
-    .directive('alert',alert);
-    // Функция смены вида list/tile
-    function listItems() {
-         var directive = {
-            link: link,
-            template: '<div ng-include="contentUrl"></div>',
-             bindToController: true,
-            replace: true,
-            restrict: 'EA'
+        .directive('alert',alert)
+        .directive('listItems',
+            function(){
+                return {
+                    restrict: 'EA',
+                    template: '<div ng-include="contentUrl">',
+                    replace: true,
 
-            };
-        return directive;
-        function link(scope, el, attrs) {
-            scope.contentUrl = 'views/items' + attrs.ListType + '.html';
-            attrs.$observe("ListType", function (v) {
-                scope.contentUrl = 'views/items' + v + '.html';
-            });
-        }
-    }
+                    link: function (scope, element, attrs) {
+                        scope.contentUrl = 'views/items' + attrs.ListType + '.html';
+                        attrs.$observe("ListType", function (v) {
+                            scope.contentUrl = 'views/items' + v + '.html';
+                        });
+                    }
+
+                }
+
+
+            }
+        );
+
+    // Функция смены вида list/tile
+
+
     // Функция алертов
     function alert() {
         return {

@@ -4,6 +4,6 @@ nav.navigation.clearfix
         a.btn.btn-default(href='/additems' ng-show='navigation.addBtn') Добавить
     .navigation__right.right(ng-show='navigation.addBtn')
         .navigation__view(ng-click='navigation.List()')
-            span(class="glyphicon glyphicon-list" aria-hidden="true" ng-class="{icon_active:navigation.ListType == ''}")
+            span(class="glyphicon glyphicon-list" aria-hidden="true" ng-class="{icon_active:navigation.ListType == 'row'}")
         .navigation__view(ng-click='navigation.Grid()')
             span(class="glyphicon glyphicon-th-large" aria-hidden="true" ng-class="{icon_active:navigation.ListType == 'tile'}")
