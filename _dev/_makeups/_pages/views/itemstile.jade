@@ -1,0 +1,8 @@
+.contacts-grid.cf
+    .contact.col-xs-6.col-md-3.placeholder(ng-repeat="item in items | filter:search" ng-click="editItems(item.$id)")
+        .contact-image
+            img(ng-src="{{item.picture}}" class="img-responsive img-circle" data-holder-rendered="true" alt="{{item.name.first}} {{item.name.last}}")
+        h4.contact__name {{item.name.first}} {{item.name.last}}
+        .contact__phone {{item.phone}}
+        .contact__email {{item.email}}
+    .clearfix

@@ -1,0 +1,26 @@
+div.alert(role="alert" alert="alert.visible") {{alert.text}}
+.contacts
+    form.clearfix.col-md-12.center(name="formContact")
+        .contact-edit.clearfix.col-md-12.ng-cloak
+            .col-md-6.col-sm-6.col-xs-12
+                .contact-image.contact-image_edit
+                    img(ng-src="{{items.data.picture}}" class="img-circle")
+                    input.img-upload.form-control(type="file" name="upload" file-upload="" pic-block="contact-image" ng-model="items.data.picture")
+                .contact_buttons.clearfix
+                    .btn.btn-default.pull-left(ng-disabled="!formContact.$valid" ng-click="items.save()") {{btnName}}
+                    .btn.btn-default.pull-right(ng-disabled="items.data.$id === undefined" ng-click="items.remove()") Удалить
+            .col-md-6.col-sm-6.col-xs-12
+                .form-group(ng-class="{'has-error':formContact.name.first.$invalid && formContact.name.first.$dirty}")
+                    label(for="name.first") Имя
+                    input.form-control(type="text" id="name.first" name="name.first" placeholder="Имя" ng-model="items.data.name.first" required)
+                .form-group(ng-class="{'has-error':formContact.name.last.$invalid && formContact.name.last.$dirty}")
+                    label(for="name.last") Фамилия
+                    input.form-control(type="text" id="name.last" name="name.last" placeholder="Фамилия" ng-model="items.data.name.last" required)
+                .form-group
+                    label Контактная информация
+                    .input-group.form-group(ng-class="{'has-error':formContact.email.$invalid && formContact.email.$dirty}")
+                        span.input-group-addon(id="basic-addon1") @
+                        input.form-control(type="email" placeholder="email" name="email" aria-describedby="basic-addon1" ng-model="items.data.email" required)
+                    .input-group(ng-class="{'has-error':formContact.phone.$invalid && formContact.phone.$dirty || formContact.phone.$error.pattern}")
+                        span.input-group-addon.glyphicon.glyphicon-earphone(id="basic-addon2")
+                        input.form-control(type="text" name="phone" ng-pattern="/^[0-9]{11}$/" placeholder="79111234566" aria-describedby="basic-addon2" ng-model="items.data.phone" required)

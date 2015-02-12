@@ -1,0 +1,25 @@
+.contacts
+    form.clearfix(name="formContact")
+        .contact-edit.clearfix.ng-cloak.col-md-12
+            .contact-edit__left
+                .contact-image.contact-image_edit
+                    img(ng-src="{{item.data.img}}")
+                    input.img-upload.form-control(type="file" name="upload" file-upload="" pic-block="contact-image" ng-model="item.data.img")
+                .contact_buttons.clearfix
+                    .btn.btn-default.pull-left(ng-disabled="!formContact.$valid" ng-click="item.save()") {{btnName}}
+                    .btn.btn-default.pull-right(ng-disabled="item.data.$id === undefined" ng-click="item.remove()") Удалить
+            .contact-edit__right.input-group
+                .form-group(ng-class="{'has-error':formContact.firstname.$invalid && formContact.firstname.$dirty}")
+                    label(for="firstname") Имя
+                    input.form-control(type="text" id="firstname" name="firstname" placeholder="Имя" ng-model="item.data.name.first" required)
+                .form-group(ng-class="{'has-error':formContact.lastname.$invalid && formContact.lastname.$dirty}")
+                    label(for="lastname") Фамилия
+                    input.form-control(type="text" id="lastname" name="lastname" placeholder="Фамилия" ng-model="item.data.name.last" required)
+                .form-group
+                    label Контактная информация
+                    .input-group(ng-class="{'has-error':formContact.email.$invalid && formContact.email.$dirty}")
+                        span.input-group-addon(id="basic-addon1") @
+                        input.form-control(type="email" placeholder="email" name="email" aria-describedby="basic-addon1" ng-model="item.data.email" required)
+                    .input-group(ng-class="{'has-error':formContact.phone.$invalid && formContact.phone.$dirty || formContact.phone.$error.pattern}")
+                        span.input-group-addon.fa.fa-phone(id="basic-addon2")
+                        input.form-control(type="text" name="phone" ng-pattern="/^[0-9]{11}$/" placeholder="79111234566" aria-describedby="basic-addon2" ng-model="item.data.phone" required)

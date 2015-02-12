@@ -1,3 +1,9 @@
+html,body{
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .whitemask{
   background: #fff;
   filter: alpha(opacity=50);
@@ -11,9 +17,170 @@
 }
 .wrapper{
   z-index: 1;
-   color: #90111a;
-   opacity: 0.5;
+   color: midnightblue;
    height: 100%;
    overflow: auto;
    padding-bottom: 56px;
  }
+// Списко контактов
+.page {
+  border-radius: 5px;
+  zoom: 1;
+  background-color: #eeeced;
+  padding: 10px;
+
+  &__contact--list {
+    padding: 33px 20px;
+  }
+  &__contact--tile{
+    padding: 5px 0 15px;
+    background-color: #f5f1f2;
+  }
+}
+// Плитка контактов
+.contact{
+  cursor: pointer;
+  margin: 20px 0;
+  &:hover{
+    box-shadow: cornflowerblue 2px 2px 10px;
+
+  }
+}
+// Сообщения алерты
+.alert {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  right: 7px;
+  text-align: center;
+}
+
+.alert.alert_active {
+  opacity: 1;
+}
+// редактирование контакта
+
+.contact-image{
+  margin-bottom: 10px;
+}
+.contact-image_edit {
+  width: 200px;
+  height: 200px;
+  position: relative;
+
+  img {
+    max-width: 198px;
+    max-height: 198px;
+  }
+
+  &:hover {
+    &:after {
+      display: inline-block;
+      content: 'Изменить...';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      text-align: center;
+      margin: auto;
+      color: white;
+      background: #000;
+      opacity: .6;
+      line-height: 200px;
+      z-index: 1;
+      border-radius: 50%;
+    }
+  }
+  margin-bottom: 10px;
+}
+
+.contact-edit__left {
+  float: left;
+  width: 200px;
+}
+.img-upload{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+
+// Навигация
+.navigation{
+  margin-bottom: 18px;
+  &__left{
+    float:left;
+  }
+  &__right{
+    float:right;
+  }
+  &__view{
+    display: inline-block;
+    float: left;
+    margin: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    &:hover{
+      color: #f5f1f2;
+    }
+  }
+}
+.search{
+  margin-left: 15px;
+}
+.icon_active{
+  color: #f5f1f2;
+}
+// СОРТИРОВКА
+
+th,tr
+{
+  cursor: pointer;
+}
+
+// АНИМАЦИЯ
+.pt-page.ng-enter,.pt-page.ng-leave {
+  -webkit-animation: moveFromRight .6s ease both;
+  animation: moveFromRight .6s ease both;
+}
+.animate-enter,
+.animate-leave
+{
+  -webkit-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+  -moz-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+  -ms-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+  -o-transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+  transition: 300ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+}
+
+.animate-enter {
+  left: 100%;
+}
+.animate-enter.animate-enter-active {
+  left: 0;
+}
+
+.animate-leave {
+  left: 0;
+}
+.animate-leave.animate-leave-active{
+  left: -100%;
+}
+.alert {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  right: 7px;
+  text-align: center;
+  opacity: 0;
+  &.alert_active {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,13 @@
+nav.navigation.clearfix
+    .navigation__left
+        a.btn.btn-default.pull-left(href='/' ng-show='navigation.btnBack') <
+        a.btn.btn-default.pull-left(href='/items/' ng-show='navigation.addBtn') Добавить
+        .search.form-inline.pull-left
+            .form-group
+                label(for="search")
+                input(class="form-inline form-control" placeholder="Поиск..." type="search" ng-model="search")
+    .navigation__right.right(ng-show='navigation.addBtn')
+        .navigation__view(ng-click='navigation.List()')
+            span(class="glyphicon glyphicon-list" aria-hidden="true" ng-class="{icon_active:navigation.listItemsType == ''}")
+        .navigation__view(ng-click='navigation.Grid()')
+            span(class="glyphicon glyphicon-th-large" aria-hidden="true" ng-class="{icon_active:navigation.listItemsType == 'tile'}")

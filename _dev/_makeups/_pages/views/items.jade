@@ -1,0 +1,14 @@
+table(class="table table-hover")
+    thead
+        tr
+            th(ng-click="reverse.index=!reverse.index;order('index',reverse.index);t=true") #
+            th(ng-click="reverse.name.first=!reverse.name.first;order('name.first',reverse.name.first);t=true") Имя
+            th(ng-click="reverse.name.first=!reverse.name.last;order('name.last',reverse.name.last);t=true") Фамилия
+            th(ng-click="reverse.phone=!reverse.phone;order('phone',reverse.phone);t=true") Телефон
+            th(ng-click="reverse.email=!reverse.email;order('email',reverse.email);t=true") email
+        tr(ng-repeat="item in items | filter:search" ng-click="editItems(item.$id)")
+            td(ng-class="{'fa-sort-asc':(rev.active=='fields.index' && rev[rev.active]),'fa-sort-desc':(rev.active=='fields.index' && !rev[rev.active])}") {{item.index + 1}}
+            td(ng-class="{'fa-sort-asc':(rev.active=='fields.name.first' && rev[rev.active]),'fa-sort-desc':(rev.active=='fields.name.first' && !rev[rev.active])}") {{item.name.first}}
+            td(ng-class="{'fa-sort-asc':(rev.active=='fields.name.last' && rev[rev.active]),'fa-sort-desc':(rev.active=='fields.name.last' && !rev[rev.active])}") {{item.name.last}}
+            td(ng-class="{'fa-sort-asc':(rev.active=='fields.phone' && rev[rev.active]),'fa-sort-desc':(rev.active=='fields.phone' && !rev[rev.active])}") {{item.phone}}
+            td(ng-class="{'fa-sort-asc':(rev.active=='fields.email' && rev[rev.active]),'fa-sort-desc':(rev.active=='fields.email' && !rev[rev.active])}") {{item.email}}
