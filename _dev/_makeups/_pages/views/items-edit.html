@@ -1,0 +1,35 @@
+
+<div class="contacts">
+  <form name="formContact" class="clearfix">
+    <div class="contact-edit clearfix ng-cloak">
+      <div class="contact-edit__left">
+        <div class="contact-image contact-image_edit"><img ng-src="{{item.data.img}}"/>
+          <input type="file" name="upload" file-upload="" pic-block="contact-image" ng-model="item.data.img" class="img-upload form-control"/>
+        </div>
+        <div class="contact_buttons clearfix">
+          <div ng-disabled="!formContact.$valid" ng-click="item.save()" class="btn btn-default pull-left">{{btnName}}</div>
+          <div ng-disabled="item.data.$id === undefined" ng-click="item.remove()" class="btn btn-default pull-right">Удалить</div>
+        </div>
+      </div>
+      <div class="contact-edit__right">
+        <div ng-class="{'has-error':formContact.firstname.$invalid &amp;&amp; formContact.firstname.$dirty}" class="form-group">
+          <label for="firstname">Имя</label>
+          <input type="text" id="firstname" name="firstname" placeholder="Имя" ng-model="item.data.firstname" required="required" class="form-control"/>
+        </div>
+        <div ng-class="{'has-error':formContact.lastname.$invalid &amp;&amp; formContact.lastname.$dirty}" class="form-group">
+          <label for="lastname">Фамилия</label>
+          <input type="text" id="lastname" name="lastname" placeholder="Фамилия" ng-model="item.data.lastname" required="required" class="form-control"/>
+        </div>
+        <div class="form-group">
+          <label>Контактная информация</label>
+          <div ng-class="{'has-error':formContact.email.$invalid &amp;&amp; formContact.email.$dirty}" class="input-group"><span id="basic-addon1" class="input-group-addon">@</span>
+            <input type="email" placeholder="email" name="email" aria-describedby="basic-addon1" ng-model="item.data.email" required="required" class="form-control"/>
+          </div>
+          <div ng-class="{'has-error':formContact.phone.$invalid &amp;&amp; formContact.phone.$dirty || formContact.phone.$error.pattern}" class="input-group"><span id="basic-addon2" class="input-group-addon fa fa-phone"></span>
+            <input type="text" name="phone" ng-pattern="/^[0-9]{11}$/" placeholder="79111234566" aria-describedby="basic-addon2" ng-model="item.data.phone" required="required" class="form-control"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
