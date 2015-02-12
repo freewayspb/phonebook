@@ -26,7 +26,7 @@ var
 BuildPath = 'app';
 
 // сборка папки 'app/'
-gulp.task('build', ['jade', 'less', 'js','images'], function() {
+gulp.task('build-old', ['jade', 'less', 'js','vendor-js','images','html','css'], function() {
     gulp.src('_dev/favicon.ico')
         .pipe(gulp.dest(BuildPath));
     gulp.src('_dev/fonts/**/*')
@@ -34,17 +34,20 @@ gulp.task('build', ['jade', 'less', 'js','images'], function() {
     gulp.src('_dev/img/**/*')
         .pipe(imagemin())
         .pipe(gulp.dest(BuildPath));
+    gulp.src('_php/**/*.php')
+        .pipe(gulp.dest(BuildPath))
+        .pipe(notify("Build successful Complete!"));
 });
 
 // компилируем Jade если не включен webstorm компилятор
 gulp.task('jade', function() {
-    gulp.src('_dev/_makeups/_pages/*.jade')
+    gulp.src('_dev/_makeups/**/*.jade')
         .pipe(jade({
             pretty: true
         }))
         .on('error', console.log) // Если есть ошибки, выводим и продолжаем
         .pipe(notify("<%= file.relative %> Complete!"))
-        .pipe(gulp.dest(BuildPath)) // Записываем собранные файлы
+        .pipe(gulp.dest('_dev/_makeups/')) // Записываем собранные файлы
 });
 
 // Очистка
@@ -57,17 +60,16 @@ gulp.task('less', function() {
     gulp.src(['_dev/_styles/**/*.less'])
         .pipe(less())
         .on('error', console.log) // Если есть ошибки, выводим и продолжаем
-        .pipe(prefixer())
-        .pipe(concatCss())
-        .pipe(minifycss({
-            keepBreaks: true
-        }))
-        .pipe(rename({
-            suffix: '.min'
-        }))
-        .pipe(gulp.dest(BuildPath + '/css'))
+        //.pipe(prefixer())
+        //.pipe(concatCss())
+        //.pipe(minifycss({
+        //    keepBreaks: true
+        //}))
+        //.pipe(rename({
+        //    suffix: '.min'
+        //}))
+        .pipe(gulp.dest('_dev/_styles/'))
         .pipe(notify("<%= file.relative %> Less Complete!"))
-        .pipe(connect.reload());
 });
 
 // собираем JS
@@ -105,7 +107,19 @@ gulp.task('css', function() {
         .pipe(notify("<%= file.relative %> CSS Complete!"))
         .pipe(connect.reload()); // даем команду на перезагрузку страницы
 });
-
+//Перенос зависимостей в js
+gulp.task('vendor-js', function() {
+    gulp.src('_dev/_vendor/_js/**/*.js')
+        .pipe(gulp.dest(BuildPath + '/js/vendor'))
+        .pipe(notify("<%= file.relative %> JS Complete!"))
+        .pipe(connect.reload()); // даем команду на перезагрузку страницы
+});
+//копируем php
+gulp.task('php', function(){
+    gulp.src('_dev/_php/**/*.php')
+        .pipe(gulp.dest(BuildPath))
+        .pipe(notify("<%= file.relative %> PHP Complete!"));
+});
 // копируем и минимизируем изображения
 gulp.task('images', function() {
     gulp.src('_dev/_img/**/*')
@@ -145,7 +159,7 @@ gulp.task('bower', function () {
 
 // СБОРКА ПРОЕКТА ДЛЯ ТЕСТА
 gulp.task('build', function(cb) {
-    runSequence('build-clean','html','js','css','images','fonts', cb);
+    runSequence('build-clean',['jade', 'less', 'js','vendor-js','images'],['html','css','php'], cb);
 });
 
 gulp.task('build-clean', function() {

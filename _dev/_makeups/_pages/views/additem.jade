@@ -5,7 +5,7 @@ div.alert(role="alert" alert="alert.visible") {{alert.text}}
             .col-md-6.col-sm-6.col-xs-12
                 .contact-image.contact-image_edit
                     img(ng-src="{{items.data.picture}}" class="img-circle")
-                    input.img-upload.form-control(type="file" name="upload" file-upload="" pic-block="contact-image" ng-model="items.data.picture")
+                    input.img-upload.form-control(type="file" name="upload" file-upload="" pic-block="items-image" ng-model="items.data.picture")
                 .contact_buttons.clearfix
                     .btn.btn-default.pull-left(ng-disabled="!formContact.$valid" ng-click="items.save()") {{btnName}}
                     .btn.btn-default.pull-right(ng-disabled="items.data.$id === undefined" ng-click="items.remove()") Удалить

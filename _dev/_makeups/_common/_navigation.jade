@@ -2,7 +2,7 @@ nav.navigation.clearfix
     .navigation__left
         a.btn.btn-default.pull-left(href='/' ng-show='navigation.btnBack') <
         a.btn.btn-default.pull-left(href='/items/' ng-show='navigation.addBtn') Добавить
-        .search.form-inline.pull-left
+        .search.form-inline.pull-left(ng-show='navigation.addBtn')
             .form-group
                 label(for="search")
                 input(class="form-inline form-control" placeholder="Поиск..." type="search" ng-model="search")
